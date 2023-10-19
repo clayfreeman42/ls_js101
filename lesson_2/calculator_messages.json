@@ -1,0 +1,16 @@
+{"en":
+  {
+    "notValidNumber": "Hmmm...that doesn't look like a valid number.",
+    "firstNum":"What is the first number?",
+    "secondNum":"What is the second number?",
+    "selectOperation": "What operation would you like to perform?\n1) Add 2) Subtract 3) Multiply 4) Divide",
+    "mustChooseOperation": "Must choose 1, 2, 3, or 4",
+    "result": "The result is: ",
+    "welcome": "Welcome to the Calculator!\n",
+    "anotherCalc": "Perform another calculation? Y or N",
+    "mustChooseAnother": "Must choose Y or N",
+    "y": "Y",
+    "n": "N",
+    "thanks": "Thanks for using the Calculator!"
+  }
+}
