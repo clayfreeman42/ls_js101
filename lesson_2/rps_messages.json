@@ -1,0 +1,13 @@
+{"en": {
+  "language": "English",
+  "notValidChoice": "That's not a valid choice.",
+  "youWin": "You win!",
+  "computerWon": "Computer won!",
+  "tie": "It's a tie!",
+  "playAgain": "Would you like to play again? (y/n)",
+  "playAgainRetry": "Please enter 'y' or 'n':"
+  },
+  "es": {
+    "language": "Español"
+  }
+}
