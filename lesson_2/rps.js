@@ -17,14 +17,14 @@ const RULES = [
 const prompt = msg => console.log(`=> ${msg}`);
 
 // Inputs
-const getUserSelection = () => {
+const getPlayerSelection = () => {
   let choice;
   let shortChoices = VALID_CHOICES.map(choice => choice[0]);
   prompt(`Choose one (first letter only - case sensitive):\n ${VALID_CHOICES.join(', ')} `);
   choice = readline.question();
 
   while (!shortChoices.includes(choice)) {
-    prompt("Not a valid choice");
+    prompt(`Please select the first letter only:\n ${VALID_CHOICES.join(', ')}`);
     choice = readline.question();
   }
 
@@ -42,13 +42,11 @@ const getComputerSelection = () => {
 };
 
 const getYOrN = response => {
-  let yesNoArray = ['y', 'n'];
-  while (!yesNoArray.includes(response)) {
+  while (!['y', 'n'].includes(response)) {
     prompt('y or n');
-    response = readline.question();
-    response = response.toLowerCase();
+    response = readline.question().toLowerCase();
   }
-  return response.toLowerCase();
+  return response;
 };
 
 // Outputs
@@ -77,9 +75,11 @@ const calcUserWins = (gameOutcomes) => {
 };
 
 const reportGameResults = (results) => {
-  let { userChoice, computerChoice, rule, outcome, scoreBoard } = results;
+  let { playerChoice, computerChoice, rule, outcome, scoreBoard } = results;
 
-  prompt(`You chose ${userChoice}. The computer chose ${computerChoice}.`);
+  console.clear();
+
+  prompt(`You chose ${playerChoice}. The computer chose ${computerChoice}.`);
   prompt(`${rule}\n`);
   prompt(`${outcome}`);
   prompt(`${scoreBoard}\n`);
@@ -90,48 +90,48 @@ const ruleTest = (counter, choiceA, choiceB) => {
   return (RULES[counter][0] === choiceA && RULES[counter][1] === choiceB);
 };
 
-const determineWinner = (choice, computerChoice) => {
-  let result = {};
+const determineWinner = (gameData) => {
+  let { playerChoice, computerChoice } = gameData;
 
   for (let index = 0; index < RULES.length; index += 1) {
-    if (choice === computerChoice) {
-      result.rule = `It's a tie!`;
-      result.outcome = `Great minds (and programs) think alike!\n`;
+    if (playerChoice === computerChoice) {
+      gameData.rule = `It's a tie!`;
+      gameData.outcome = `Great minds (and programs) think alike!\n`;
       break;
 
-    } else if (ruleTest(index, choice, computerChoice)) {
-      result.rule = RULES[index][2];
-      result.outcome = `You've won!\n`;
+    } else if (ruleTest(index, playerChoice, computerChoice)) {
+      gameData.rule = RULES[index][2];
+      gameData.outcome = `You've won!\n`;
       break;
 
-    } else if (ruleTest(index, computerChoice, choice)) {
-      result.rule = RULES[index][2];
-      result.outcome = `The computer won.\n`;
+    } else if (ruleTest(index, computerChoice, playerChoice)) {
+      gameData.rule = RULES[index][2];
+      gameData.outcome = `The computer won.\n`;
       break;
     }
   }
-  return result;
+  return gameData;
 };
 
 let rpsGame = () => {
-  let userSelection = getUserSelection();
-  let computerSelection = getComputerSelection();
-
-  let gameResults = determineWinner(userSelection, computerSelection);
-  gameResults.userChoice = userSelection;
-  gameResults.computerChoice = computerSelection;
+  let gameResults = {};
+  gameResults.playerChoice = getPlayerSelection();
+  gameResults.computerChoice = getComputerSelection();
+  gameResults = determineWinner(gameResults);
 
   return gameResults;
 };
 
 // Game orchestration
 (() => {
-  let playAgain = '';
+  let playBestOfFive = '';
   let scoreKeeper = [];
 
   do {
-    console.clear();
-    prompt(`Welcome to Rock, Paper, Scissors, Lizard, Spock!\n`);
+    if (playBestOfFive === '') {
+      console.clear();
+      prompt(`Welcome to Rock, Paper, Scissors, Lizard, Spock!\n`);
+    }
 
     let game = rpsGame();
     scoreKeeper = updateScores(scoreKeeper, game.outcome);
@@ -139,10 +139,12 @@ let rpsGame = () => {
 
     reportGameResults(game);
 
-    prompt(`Would you like to play again`);
-    playAgain = getYOrN();
+    prompt(`Best out of five?`);
+    if (playBestOfFive === '') {
+      playBestOfFive = getYOrN();
+    }
 
-  } while (playAgain === `y`);
+  } while (playBestOfFive === 'y' && scoreKeeper.length < 5);
 
   prompt(`Thanks for playing Rock, Paper, Scissors, Lizard, Spock!`);
 })();
