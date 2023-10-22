@@ -18,21 +18,21 @@ const prompt = msg => console.log(`=> ${msg}`);
 
 // Inputs
 const getPlayerSelection = () => {
-  let choice;
+  let playerChoice;
 
-  let shortChoices = VALID_CHOICES.map(choice => choice[0]);
+  let shortChoices = VALID_CHOICES.map(playerChoice => playerChoice[0]);
   prompt(`Choose one (first letter only - case sensitive):\n ${VALID_CHOICES.join(', ')} `);
-  choice = readline.question();
+  playerChoice = readline.question();
 
-  while (!shortChoices.includes(choice)) {
+  while (!shortChoices.includes(playerChoice)) {
     prompt(`Please select the first letter only:\n ${VALID_CHOICES.join(', ')}`);
-    choice = readline.question();
+    playerChoice = readline.question();
   }
 
-  let indexOfChoice = shortChoices.indexOf(choice);
-  choice = VALID_CHOICES[indexOfChoice];
+  let indexOfChoice = shortChoices.indexOf(playerChoice);
+  playerChoice = VALID_CHOICES[indexOfChoice];
 
-  return choice;
+  return playerChoice;
 };
 
 const getComputerSelection = () => {
