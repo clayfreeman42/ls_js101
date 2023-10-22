@@ -51,6 +51,35 @@ const getYOrN = response => {
 };
 
 // Outputs
+const gameReportGenerator = (results, priorGameData) => {
+  let { playerChoice, computerChoice, rule, outcome } = results;
+
+  console.clear();
+
+  prompt(`You chose ${playerChoice}. The computer chose ${computerChoice}.`);
+  prompt(`${rule}\n`);
+  prompt(`${outcome}`);
+  if ('numGames' in priorGameData ) {
+    prompt(`Game ${priorGameData.numGames + 1}.\n`);
+  }
+};
+
+const bestOfFiveReportGenerator = (gameInfo) => {
+  let {numGames, playerWins, computerWins, ties } = gameInfo;
+  prompt('The Best Out of Five Match has concluded.\n');
+  if ( playerWins > computerWins ) {
+    prompt('You won the match!');
+    prompt(`You won with ${playerWins} win(s) vs the computer with ${computerWins} win(s).\n`);
+  } else if (playerWins < computerWins) {
+    prompt('You lost :(');
+    prompt(`The computer won the match with ${computerWins} wins vs your ${playerWins} wins.\n`);
+  } else {
+    prompt(`It was a tie with ${playerWins} each.\n`);
+  }
+  prompt(`${numGames} games were played to reach a winner with ${ties} tie(s).\n`);
+};
+
+// Best of five functions
 // keep a maximum of five results from previous games
 const scoreTracker = (scores, result) => {
   if (scores.length < 5) {
@@ -96,34 +125,6 @@ const calcBestOfFive = gamesArray => {
   };
 
   return gameCounter(gamesArray, gamesData);
-};
-
-const gameReportGenerator = (results, priorGameData) => {
-  let { playerChoice, computerChoice, rule, outcome } = results;
-
-  console.clear();
-
-  prompt(`You chose ${playerChoice}. The computer chose ${computerChoice}.`);
-  prompt(`${rule}\n`);
-  prompt(`${outcome}`);
-  if ('numGames' in priorGameData ) {
-    prompt(`Game ${priorGameData.numGames + 1}.\n`);
-  }
-};
-
-const bestOfFiveReportGenerator = (gameInfo) => {
-  let {numGames, playerWins, computerWins, ties } = gameInfo;
-  prompt('The Best Out of Five Match has concluded.\n');
-  if ( playerWins > computerWins ) {
-    prompt('You won the match!');
-    prompt(`You won with ${playerWins} win(s) vs the computer with ${computerWins} win(s).\n`);
-  } else if (playerWins < computerWins) {
-    prompt('You lost :(');
-    prompt(`The computer won the match with ${computerWins} wins vs your ${playerWins} wins.\n`);
-  } else {
-    prompt(`It was a tie with ${playerWins} each.\n`);
-  }
-  prompt(`${numGames} games were played to reach a winner with ${ties} tie(s).\n`);
 };
 
 // Main game functions
