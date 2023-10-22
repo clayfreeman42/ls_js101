@@ -6,6 +6,8 @@
 
 const MESSAGES = require('./mortgage_calc_messages.json');
 const readline = require('readline-sync');
+const PERCENTAGE_TO_DECIMAL = 0.01;
+const MONTHS_IN_YEAR = 12;
 
 // GET language options then allow the user to select a language
 const getLanguageOptions = () => {
@@ -61,20 +63,25 @@ let getYesOrNo = response => {
   while (!yesNoArray.includes(response)) {
     prompt('yesNo');
     response = readline.question();
+    response = response.toLowerCase();
   }
   return response.toLowerCase();
+};
+
+let getValidNumber = (msg, min = 0, max = Infinity) => {
+  let num;
+  do {
+    prompt(msg);
+    num = readline.question();
+  } while (invalidNumber(num) || num < min || num > max);
+
+  return Number(num);
 };
 
 // GET loan amount and validate
 const getLoanAmount = () => {
   prompt('enterLoanAmount');
-  let loanAmount = readline.question();
-
-  while (invalidNumber(loanAmount) || Number(loanAmount) <= 0) {
-    prompt('enterNumberRetry');
-    loanAmount = readline.question();
-  }
-  loanAmount = Number(loanAmount);
+  let loanAmount = getValidNumber('enterOneOrGreater', 1);
 
   return loanAmount;
 };
@@ -82,15 +89,10 @@ const getLoanAmount = () => {
 // GET APR and validate
 const getAPR = () => {
   prompt('enterAPR');
-  let interestAPR = readline.question();
+  let interestAPR = getValidNumber('enterAPRRetry', 1, 50);
 
-  while (invalidNumber(interestAPR) || interestAPR <= 0 || interestAPR > 50) {
-    prompt('enterAPRRetry');
-    interestAPR = readline.question();
-  }
-
-  interestAPR = Number(interestAPR) * 0.01; // convert percent to decimal
-  let interestRateMonthly = interestAPR / 12;
+  interestAPR = Number(interestAPR) * PERCENTAGE_TO_DECIMAL;
+  let interestRateMonthly = interestAPR / MONTHS_IN_YEAR;
 
   return interestRateMonthly;
 };
@@ -99,6 +101,7 @@ const getAPR = () => {
 const getYearMonthArray = () => {
   let yearMonthArray;
   yearMonthArray = [translate('yearsInitial'), translate('monthsInitial')];
+
   return yearMonthArray;
 }; // GET translated year and month initials for validation
 
@@ -114,14 +117,14 @@ const getLoanDuration = () => {
 
   if (loanDurationUnit.toLowerCase() === translate('yearsInitial').toLowerCase()) {
     prompt('loanDurationYears');
-    loanDurationYears = readline.question();
+    loanDurationYears = getValidNumber('enterOneOrGreater', 1);
   } else if (loanDurationUnit.toLowerCase() === translate('monthsInitial').toLowerCase()) {
     prompt('loanDurationMonths');
-    loanDurationMonths = readline.question();
+    loanDurationMonths = getValidNumber('enterOneOrGreater', 1);
   }
 
   if (loanDurationYears) {
-    loanDurationMonths = loanDurationYears * 12;
+    loanDurationMonths = loanDurationYears * 1;
   }
 
   return loanDurationMonths;
