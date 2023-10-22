@@ -128,31 +128,26 @@ const calcBestOfFive = gamesArray => {
 };
 
 // Main game functions
-const ruleTest = (counter, choiceA, choiceB) => {
-  return (RULES[counter][0] === choiceA && RULES[counter][1] === choiceB);
-};
-
-const determineWinner = (gameData) => {
+const determineWinner = gameData => {
   let { playerChoice, computerChoice } = gameData;
 
-  for (let index = 0; index < RULES.length; index += 1) {
+  for (const rule of RULES) {
     if (playerChoice === computerChoice) {
       gameData.rule = `It's a tie game!`;
       gameData.outcome = `Great minds (and programs) think alike!\n`;
       break;
 
-    } else if (ruleTest(index, playerChoice, computerChoice)) {
-      gameData.rule = RULES[index][2];
+    } else if (rule[0] === playerChoice && rule[1] === computerChoice) {
+      gameData.rule = rule[2];
       gameData.outcome = `You've won the game!\n`;
       break;
 
-    } else if (ruleTest(index, computerChoice, playerChoice)) {
-      gameData.rule = RULES[index][2];
+    } else if (rule[0] === computerChoice && rule[1] === playerChoice) {
+      gameData.rule = rule[2];
       gameData.outcome = `The computer won the game.\n`;
       break;
     }
   }
-  console.log(gameData);
   return gameData;
 };
 
